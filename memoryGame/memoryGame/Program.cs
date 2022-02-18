@@ -159,7 +159,9 @@ namespace memoryGame
             }
             
             
-            
+            newGameMenu(player);
+            DisplayManager.PressAnyKeyToContinue();
+            DisplayManager.ClearScreen();
         }
         
         private List<String> getModeWords(List<string> allWords)
@@ -265,7 +267,7 @@ namespace memoryGame
             }
         }
         
-                private Coordinates askForCoordinates()
+        private Coordinates askForCoordinates()
         {
             string inputCoordinates = "";
             bool isInputNotCorrect = true;
@@ -335,6 +337,33 @@ namespace memoryGame
             coordinates.setY(inputCoordinatesArray[0]);
             // Console.WriteLine("Your Coordinates:\n" + coordinates.toString());
             return coordinates;
+        }
+        
+        private void newGameMenu(Player player)
+        {
+            Console.WriteLine("Would You like to play again, " + player.getName() + "?");
+            bool isRunningRestartMenu = true;
+            while (isRunningRestartMenu)
+            {
+                DisplayManager.DisplayRestartMenu();
+                var chooseOption = Console.ReadLine();
+                DisplayManager.ClearScreen();
+                switch (chooseOption)
+                {
+                    case "1":
+                        isRunningRestartMenu = false;
+                        break;
+                    case "2":
+                        DisplayManager.DisplayHighScoreTable(highScores);
+                        break;
+                    case "3":
+                        Environment.Exit(0);
+                        break;
+                    default:
+                        Console.WriteLine("Wrong input!");
+                        break;
+                }
+            }
         }
         
         private bool isWinner(Player player)
@@ -610,6 +639,15 @@ namespace memoryGame
             Console.WriteLine("Hits = " + player.getHits());
             Console.WriteLine("Hp = " + player.getHp());
             Console.WriteLine();
+        }
+        
+        public static void DisplayRestartMenu()
+        {
+            Console.WriteLine("RESTART MENU");
+            Console.WriteLine("\n[1]-Yes, I want to play again.");
+            Console.WriteLine("[2]-Display high score table");
+            Console.WriteLine("[3]-exit game");
+            Console.WriteLine("\nChoose one option: ");
         }
     }
 }
