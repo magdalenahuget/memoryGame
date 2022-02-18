@@ -114,6 +114,7 @@ namespace memoryGame
             int GUESS_CHANCES_LEFT = GUESS_CHANCES;
             player.SetName(name);
             player.SetHp(GUESS_CHANCES_LEFT);
+            player.SetHits(0);
             allWords = FileHandler.GetWordsList("../../Words.txt");
             modeWords = GetModeWords(allWords);
             List<String> aRowString = new List<String>(modeWords);
@@ -126,14 +127,19 @@ namespace memoryGame
             // Helper - to see shuffled A and B rows
             // Console.WriteLine("aRowString = " + string.Join(", ", aRowString));
             // Console.WriteLine("bRowString = " + string.Join(", ", bRowString));
+
+            Console.WriteLine("asdasd===" );
+            Console.WriteLine("Player = " + player.GetName());
+            Console.WriteLine("Hits = " + player.GetHits());
+            Console.WriteLine("Hp = " + player.GetHp());
             
             bool isPlaying = true;
             while (isPlaying)
             {
-                if (player.GetHp() == 0 || this.player.GetHits() == WORDS_NUMBER)
+                if (player.GetHp() == 0 || player.GetHits() == WORDS_NUMBER)
                 {
                     isPlaying = false;
-                    continue;
+                    break;
                 }
                 ROUND++;
                 DisplayManager.DisplayHeader(player, ROUND);
@@ -207,7 +213,6 @@ namespace memoryGame
             for (int i = 0; i < WORDS_NUMBER; i++)
             {
                 indexes.Add(list[i]);
-                Console.WriteLine(list[i]);
             }
 
             return indexes;
@@ -574,7 +579,8 @@ namespace memoryGame
         private String playerName;
         private int score;
         private String gameLocalDateTime;
-
+        private string gameMode; // TODO: add game mode to high score table
+        
         public String GetGameLocalDateTime()
         {
             return gameLocalDateTime;
