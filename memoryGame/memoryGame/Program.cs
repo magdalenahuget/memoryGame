@@ -29,14 +29,14 @@ namespace memoryGame
         
         public GameController()
         {
-            this.player = new Player();
+            player = new Player();
         }
 
         public void run()
         {
             Console.WriteLine("Welcome to my memory game!");
             DisplayManager.ClearScreen();
-            var playerName = getPlayerName();
+            string playerName = getPlayerName();
             Console.WriteLine("Welcome " + playerName);
             DisplayManager.PressAnyKeyToContinue();
             // TODO: menu
