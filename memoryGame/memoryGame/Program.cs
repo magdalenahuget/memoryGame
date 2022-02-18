@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -16,7 +15,7 @@ namespace memoryGame
         public static void Main(String[] args)
         {
             GameController gameController = new GameController();
-            gameController.run();
+            gameController.Run();
         }
     }
 
@@ -36,34 +35,34 @@ namespace memoryGame
             player = new Player();
         }
 
-        public void run()
+        public void Run()
         {
             Console.WriteLine("Welcome to my memory game!");
             DisplayManager.ClearScreen();
-            string playerName = getPlayerName();
+            string playerName = GetPlayerName();
             Console.WriteLine("Welcome " + playerName);
             DisplayManager.PressAnyKeyToContinue();
-            playMenu(playerName);
+            PlayMenu(playerName);
         }
 
-        public String getPlayerName()
+        public String GetPlayerName()
         {
             // TODO: validate name
             Console.WriteLine("What is the name of the Player?");
             return Console.ReadLine();
         }
 
-        private void playMenu(String name)
+        private void PlayMenu(String name)
         {
             while (isRunning)
             {
-                DisplayManager.displayMainMenu();
+                DisplayManager.DisplayMainMenu();
                 var chooseOption = Console.ReadLine();
                 DisplayManager.ClearScreen();
                 switch (chooseOption)
                 {
                     case "1":
-                        playGame(name);
+                        PlayGame(name);
                         break;
                     case "2":
                         DisplayManager.DisplayCredits();
@@ -78,7 +77,7 @@ namespace memoryGame
             }
         }
         
-        private void playGame(String name)
+        private void PlayGame(String name)
         {
             while (isRunning)
             {
@@ -88,11 +87,11 @@ namespace memoryGame
                 {
                     case "1":
                         //  Easy
-                        playMode(name, 4, 10, "easy");
+                        PlayMode(name, 4, 10, "easy");
                         break;
                     case "2":
                         //  Hard
-                        playMode(name, 8, 15, "hard");
+                        PlayMode(name, 8, 15, "hard");
                         break;
                     case "3":
                         Environment.Exit(0);
@@ -104,7 +103,7 @@ namespace memoryGame
             }
         }
 
-        private void playMode(String name, int wordsNumberToGuess, int guessChances, String mode)
+        private void PlayMode(String name, int wordsNumberToGuess, int guessChances, String mode)
         {
             Console.WriteLine("Welcome to mode " + mode);
             DisplayManager.PressAnyKeyToContinue();
@@ -113,16 +112,16 @@ namespace memoryGame
             GUESS_CHANCES = guessChances;
             // GUESS_CHANCES = 1;
             int GUESS_CHANCES_LEFT = GUESS_CHANCES;
-            player.setName(name);
-            player.setHp(GUESS_CHANCES_LEFT);
-            allWords = FileHandler.getWordsList("../../Words.txt");
-            modeWords = getModeWords(allWords);
+            player.SetName(name);
+            player.SetHp(GUESS_CHANCES_LEFT);
+            allWords = FileHandler.GetWordsList("../../Words.txt");
+            modeWords = GetModeWords(allWords);
             List<String> aRowString = new List<String>(modeWords);
             List<String> bRowString = new List<String>(modeWords);
-            shuffle(aRowString);
-            shuffle(bRowString);
-            List<Word> aRow = convertToWordsList(aRowString);
-            List<Word> bRow = convertToWordsList(bRowString);
+            Shuffle(aRowString);
+            Shuffle(bRowString);
+            List<Word> aRow = ConvertToWordsList(aRowString);
+            List<Word> bRow = ConvertToWordsList(bRowString);
             
             // Helper - to see shuffled A and B rows
             // Console.WriteLine("aRowString = " + string.Join(", ", aRowString));
@@ -131,7 +130,7 @@ namespace memoryGame
             bool isPlaying = true;
             while (isPlaying)
             {
-                if (player.getHp() == 0 || this.player.getHits() == WORDS_NUMBER)
+                if (player.GetHp() == 0 || this.player.GetHits() == WORDS_NUMBER)
                 {
                     isPlaying = false;
                     continue;
@@ -140,37 +139,37 @@ namespace memoryGame
                 DisplayManager.DisplayHeader(player, ROUND);
                 DisplayManager.DisplayTable(aRow, bRow);
 
-                Coordinates firstCoordinates = askForCoordinates();
+                Coordinates firstCoordinates = AskForCoordinates();
                 
                 DisplayManager.DisplayHeader(player, ROUND);
-                toggleWord(aRow, bRow, firstCoordinates);
+                ToggleWord(aRow, bRow, firstCoordinates);
                 DisplayManager.DisplayTable(aRow, bRow);
-                Coordinates secondCoordinates = askForCoordinates();
-                toggleWord(aRow, bRow, secondCoordinates);
+                Coordinates secondCoordinates = AskForCoordinates();
+                ToggleWord(aRow, bRow, secondCoordinates);
                 DisplayManager.DisplayTable(aRow, bRow);
                 
-                int hits = verifyCompatibilityAndGetHitNumber(aRow, bRow);
-                coverTable(aRow, bRow);
+                int hits = VerifyCompatibilityAndGetHitNumber(aRow, bRow);
+                CoverTable(aRow, bRow);
                 
-                player.setHits(hits);
+                player.SetHits(hits);
                 GUESS_CHANCES_LEFT--;
-                player.setHp(GUESS_CHANCES_LEFT);
+                player.SetHp(GUESS_CHANCES_LEFT);
                 DisplayManager.PressAnyKeyToContinue();
             }
             
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             stopwatch.Stop();
-            long gameTime = getTimeSeconds(stopwatch);
-            bool playerWon = isWinner(player);
+            long gameTime = GetTimeSeconds(stopwatch);
+            bool playerWon = IsWinner(player);
             if (playerWon)
             {
                 int chancesAfterWon = GUESS_CHANCES - GUESS_CHANCES_LEFT;
-                int playerScore = calculatePlayerScore(gameTime, player, chancesAfterWon);
+                int playerScore = CalculatePlayerScore(gameTime, player, chancesAfterWon);
                 Console.WriteLine("You solved the memory game after " + chancesAfterWon + " chances." +
                                   " It took you " + gameTime + " seconds. Your score is: " +
                                   playerScore + "\n\n");
-                addScoreToHighScores(playerScore);
+                AddScoreToHighScores(playerScore);
             }
             else
             {
@@ -178,14 +177,14 @@ namespace memoryGame
             }
             
             
-            newGameMenu(player);
+            NewGameMenu(player);
             DisplayManager.PressAnyKeyToContinue();
             DisplayManager.ClearScreen();
         }
         
-        private List<String> getModeWords(List<string> allWords)
+        private List<String> GetModeWords(List<string> allWords)
         {
-            List<int> indexes = getIndexes(allWords);
+            List<int> indexes = GetIndexes(allWords);
             var modeWords = new List<String>();
             foreach (int index in indexes)
             {
@@ -195,7 +194,7 @@ namespace memoryGame
             return modeWords;
         }
         
-        public List<int> getIndexes(List<string> words)
+        public List<int> GetIndexes(List<string> words)
         {
             List<int> list = new List<int>();
             for (int i = 0; i < words.Count; i++)
@@ -203,7 +202,7 @@ namespace memoryGame
                 list.Add(i);
             }
 
-            shuffle(list); 
+            Shuffle(list); 
             List<int> indexes = new List<int>();
             for (int i = 0; i < WORDS_NUMBER; i++)
             {
@@ -216,7 +215,7 @@ namespace memoryGame
         
         private static Random rng = new Random();
 
-        public static void shuffle<T>(IList<T> list)
+        public static void Shuffle<T>(IList<T> list)
         {
             int n = list.Count;
             while (n > 1)
@@ -229,7 +228,7 @@ namespace memoryGame
             }
         }
         
-        private List<Word> convertToWordsList(List<string> aRowString)
+        private List<Word> ConvertToWordsList(List<string> aRowString)
         {
             var words = new List<Word>();
             foreach (String word in aRowString)
@@ -240,31 +239,31 @@ namespace memoryGame
             return words;
         }
 
-        private void toggleWord(List<Word> aWords, List<Word> bWords, Coordinates coordinates)
+        private void ToggleWord(List<Word> aWords, List<Word> bWords, Coordinates coordinates)
         {
-            if (coordinates.getY().Equals("A"))
+            if (coordinates.GetY().Equals("A"))
             {
-                aWords[coordinates.getX()].toggleSkin();
+                aWords[coordinates.GetX()].ToggleSkin();
             }
 
-            if (coordinates.getY().Equals("B"))
+            if (coordinates.GetY().Equals("B"))
             {
-                bWords[coordinates.getX()].toggleSkin();
+                bWords[coordinates.GetX()].ToggleSkin();
             }
         }
         
-        private int verifyCompatibilityAndGetHitNumber(List<Word> aRow, List<Word> bRow)
+        private int VerifyCompatibilityAndGetHitNumber(List<Word> aRow, List<Word> bRow)
         {
             int hits = 0;
             foreach (Word aRowWord in aRow)
             {
                 foreach (Word bRowWord in bRow)
                 {
-                    if (aRowWord.getSkin().Length > 1 && bRowWord.getSkin().Length > 1 &&
-                        aRowWord.getSkin().Equals(bRowWord.getSkin()))
+                    if (aRowWord.GetSkin().Length > 1 && bRowWord.GetSkin().Length > 1 &&
+                        aRowWord.GetSkin().Equals(bRowWord.GetSkin()))
                     {
-                        aRowWord.setIsDiscovered(true);
-                        bRowWord.setIsDiscovered(true);
+                        aRowWord.SetIsDiscovered(true);
+                        bRowWord.SetIsDiscovered(true);
                         hits++;
                     }
                 }
@@ -273,20 +272,20 @@ namespace memoryGame
             return hits;
         }
         
-        private void coverTable(List<Word> aRow, List<Word> bRow)
+        private void CoverTable(List<Word> aRow, List<Word> bRow)
         {
             foreach (Word aRowWord in aRow)
             {
-                aRowWord.toggleSkinBasedOnDiscovered();
+                aRowWord.ToggleSkinBasedOnDiscovered();
             }
 
             foreach (Word bRowWord in bRow)
             {
-                bRowWord.toggleSkinBasedOnDiscovered();
+                bRowWord.ToggleSkinBasedOnDiscovered();
             }
         }
         
-        private Coordinates askForCoordinates()
+        private Coordinates AskForCoordinates()
         {
             string inputCoordinates = "";
             bool isInputNotCorrect = true;
@@ -302,16 +301,8 @@ namespace memoryGame
                 Console.WriteLine("You entered too long coordinates.");
             }
             
-            // Console.WriteLine("inputCoordinates = " + inputCoordinates);
-            string firstCoord = inputCoordinates[0].ToString().ToUpper();
-            string secondCoord = inputCoordinates[1].ToString();
-            String[] inputCoordinatesArray = new string[2];
-            inputCoordinatesArray[0] = firstCoord;
-            inputCoordinatesArray[1] = secondCoord;
-            
-            // Console.WriteLine("first index = " + inputCoordinatesArray[0]);
+            string[] inputCoordinatesArray = CreateInputCoordinatesArray(inputCoordinates);
 
-            
             bool yCoordsNotCorrect = true;
             while (yCoordsNotCorrect)
             {
@@ -324,9 +315,7 @@ namespace memoryGame
                 {
                     Console.WriteLine("Given vertical coordinate (first one) is wrong. Try again.");
                     inputCoordinates = Console.ReadLine();
-                    // inputCoordinatesArray = inputCoordinates.Split("");
-                    inputCoordinatesArray = Regex.Split(inputCoordinates, string.Empty);
-
+                    inputCoordinatesArray = CreateInputCoordinatesArray(inputCoordinates);
                 }
             }
 
@@ -336,7 +325,6 @@ namespace memoryGame
                 string wordsNumberRegex = "[1-" + WORDS_NUMBER + "]";
                 Regex regex = new Regex(wordsNumberRegex);
                 Match match = regex.Match(inputCoordinatesArray[1]);
-                // if (inputCoordinatesArray[1].matches(wordsNumberRegex))
                 if (match.Success)
                 {
                     xCoordsNotCorrect = false;
@@ -346,21 +334,30 @@ namespace memoryGame
                     Console.WriteLine("Given horizontal coordinate (second one) is wrong. Try again.");
                     Console.WriteLine("Enter coordinates:");
                     inputCoordinates = Console.ReadLine();
-                    inputCoordinatesArray = Regex.Split(inputCoordinates, string.Empty);
-                    // inputCoordinatesArray = inputCoordinates.Split("");
+                    inputCoordinatesArray = CreateInputCoordinatesArray(inputCoordinates);
                 }
             }
 
             var coordinates = new Coordinates();
-            coordinates.setX(int.Parse(inputCoordinatesArray[1]) - 1);
-            coordinates.setY(inputCoordinatesArray[0]);
-            // Console.WriteLine("Your Coordinates:\n" + coordinates.toString());
+            coordinates.SetX(int.Parse(inputCoordinatesArray[1]) - 1);
+            coordinates.SetY(inputCoordinatesArray[0]);
+            // Console.WriteLine("Your Coordinates:\n" + coordinates.toString()); // Helper - to see coordinates
             return coordinates;
         }
-        
-        private void newGameMenu(Player player)
+
+        private static string[] CreateInputCoordinatesArray(string inputCoordinates)
         {
-            Console.WriteLine("Would You like to play again, " + player.getName() + "?");
+            string firstCoord = inputCoordinates[0].ToString().ToUpper();
+            string secondCoord = inputCoordinates[1].ToString();
+            String[] inputCoordinatesArray = new string[2];
+            inputCoordinatesArray[0] = firstCoord;
+            inputCoordinatesArray[1] = secondCoord;
+            return inputCoordinatesArray;
+        }
+
+        private void NewGameMenu(Player player)
+        {
+            Console.WriteLine("Would You like to play again, " + player.GetName() + "?");
             bool isRunningRestartMenu = true;
             while (isRunningRestartMenu)
             {
@@ -385,14 +382,14 @@ namespace memoryGame
             }
         }
         
-        private long getTimeSeconds(Stopwatch stopwatch)
+        private long GetTimeSeconds(Stopwatch stopwatch)
         {
             return stopwatch.Elapsed.Seconds;
         }
         
-        private bool isWinner(Player player)
+        private bool IsWinner(Player player)
         {
-            if (player.getHp() > 0)
+            if (player.GetHp() > 0)
             {
                 return true;
             }
@@ -400,19 +397,19 @@ namespace memoryGame
             return false;
         }
 
-        private int calculatePlayerScore(long gameTime, Player player, int chancesAfterWon)
+        private int CalculatePlayerScore(long gameTime, Player player, int chancesAfterWon)
         {
             int result = 100;
             result = (int) (result - gameTime + chancesAfterWon);
             return result;
         }
         
-        private void addScoreToHighScores(int playerScore)
+        private void AddScoreToHighScores(int playerScore)
         {
             HighScore highScore = new HighScore();
-            highScore.setPlayerName(player.getName());
-            highScore.setScore(playerScore);
-            highScore.setGameLocalDateTime(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss"));
+            highScore.SetPlayerName(player.GetName());
+            highScore.SetScore(playerScore);
+            highScore.SetGameLocalDateTime(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss"));
             highScores.Add(highScore);
         }
 
@@ -424,42 +421,42 @@ namespace memoryGame
         private String name;
         private int hits;
 
-        public int getHits()
+        public int GetHits()
         {
             return hits;
         }
 
-        public void setHits(int hits)
+        public void SetHits(int hits)
         {
             this.hits = hits;
         }
 
         public Player()
         {
-            this.hits = 0;
+            hits = 0;
         }
 
-        public int getHp()
+        public int GetHp()
         {
             return hp;
         }
 
-        public void decreaseHp(int damage)
+        public void DecreaseHp(int damage)
         {
             hp -= damage;
         }
 
-        public String getName()
+        public String GetName()
         {
             return name;
         }
 
-        public void setName(String name)
+        public void SetName(String name)
         {
             this.name = name;
         }
 
-        public void setHp(int hp)
+        public void SetHp(int hp)
         {
             this.hp = hp;
         }
@@ -470,22 +467,22 @@ namespace memoryGame
         private int x;
         private String y;
 
-        public int getX()
+        public int GetX()
         {
             return x;
         }
 
-        public void setX(int x)
+        public void SetX(int x)
         {
             this.x = x;
         }
 
-        public String getY()
+        public String GetY()
         {
             return y;
         }
 
-        public void setY(String y)
+        public void SetY(String y)
         {
             this.y = y;
         }
@@ -511,17 +508,17 @@ namespace memoryGame
             skin = "X";
         }
 
-        public String getSkin()
+        public String GetSkin()
         {
             return skin;
         }
 
-        public void setSkin(String skin)
+        public void SetSkin(String skin)
         {
             this.skin = skin;
         }
 
-        public void toggleSkin()
+        public void ToggleSkin()
         {
             if (isDiscovered)
             {
@@ -539,7 +536,7 @@ namespace memoryGame
             }
         }
 
-        public void toggleSkinBasedOnDiscovered()
+        public void ToggleSkinBasedOnDiscovered()
         {
             if (isDiscovered)
             {
@@ -551,22 +548,22 @@ namespace memoryGame
             }
         }
 
-        public String getName()
+        public String GetName()
         {
             return name;
         }
 
-        public void setName(String name)
+        public void SetName(String name)
         {
             this.name = name;
         }
 
-        public bool getIsDiscovered()
+        public bool GetIsDiscovered()
         {
             return isDiscovered;
         }
 
-        public void setIsDiscovered(bool discovered)
+        public void SetIsDiscovered(bool discovered)
         {
             isDiscovered = discovered;
         }
@@ -578,32 +575,32 @@ namespace memoryGame
         private int score;
         private String gameLocalDateTime;
 
-        public String getGameLocalDateTime()
+        public String GetGameLocalDateTime()
         {
             return gameLocalDateTime;
         }
 
-        public void setGameLocalDateTime(String gameLocalDateTime)
+        public void SetGameLocalDateTime(String gameLocalDateTime)
         {
             this.gameLocalDateTime = gameLocalDateTime;
         }
 
-        public String getPlayerName()
+        public String GetPlayerName()
         {
             return playerName;
         }
 
-        public void setPlayerName(String playerName)
+        public void SetPlayerName(String playerName)
         {
             this.playerName = playerName;
         }
 
-        public int getScore()
+        public int GetScore()
         {
             return score;
         }
 
-        public void setScore(int score)
+        public void SetScore(int score)
         {
             this.score = score;
         }
@@ -611,7 +608,7 @@ namespace memoryGame
     
     public class FileHandler
     {
-        public static List<string> getWordsList(string fileName)
+        public static List<string> GetWordsList(string fileName)
         {
             List<string> allLinesText = File.ReadAllLines(fileName).ToList();
             return allLinesText;
@@ -620,7 +617,7 @@ namespace memoryGame
 
     public class DisplayManager
     {
-        public static void displayMainMenu()
+        public static void DisplayMainMenu()
         {
             Console.WriteLine("MEMORY GAME");
             Console.WriteLine("\n[1]-start game");
@@ -671,7 +668,7 @@ namespace memoryGame
             row.Append(lineTitle).Append(" ");
             foreach (Word word in words)
             {
-                row.Append(word.getSkin()).Append(" ");
+                row.Append(word.GetSkin()).Append(" ");
             }
 
             return row.ToString();
@@ -697,7 +694,7 @@ namespace memoryGame
             row.Append(lineTitle).Append(" ");
             foreach (Word word in words)
             {
-                row.Append(word.getIsDiscovered()).Append(" ");
+                row.Append(word.GetIsDiscovered()).Append(" ");
             }
 
             return row.ToString();
@@ -712,9 +709,9 @@ namespace memoryGame
         {
             ClearScreen();
             Console.WriteLine("=============================== ROUND " + ROUND);
-            Console.WriteLine("Player = " + player.getName());
-            Console.WriteLine("Hits = " + player.getHits());
-            Console.WriteLine("Hp = " + player.getHp());
+            Console.WriteLine("Player = " + player.GetName());
+            Console.WriteLine("Hits = " + player.GetHits());
+            Console.WriteLine("Hp = " + player.GetHp());
             Console.WriteLine();
         }
         
@@ -733,8 +730,8 @@ namespace memoryGame
             Console.WriteLine("#, name, score, dateTime");
             foreach (HighScore highScore in highScores)
             {
-                Console.WriteLine("1. " + highScore.getPlayerName() + " " + highScore.getScore() + " " +
-                                  string.Join(", ", highScore.getGameLocalDateTime()));
+                Console.WriteLine("1. " + highScore.GetPlayerName() + " " + highScore.GetScore() + " " +
+                                  string.Join(", ", highScore.GetGameLocalDateTime()));
             }
 
             if (highScores.Count == 0)
