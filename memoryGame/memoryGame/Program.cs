@@ -22,7 +22,6 @@ namespace memoryGame
 
     public class GameController
     {
-        private String filename = "src/main/resources/Words.txt";
         private List<string> allWords = new List<string>();
         private List<string> modeWords = new List<string>();
         private Player player;
@@ -44,12 +43,12 @@ namespace memoryGame
             string playerName = getPlayerName();
             Console.WriteLine("Welcome " + playerName);
             DisplayManager.PressAnyKeyToContinue();
-            // TODO: menu
             playMenu(playerName);
         }
 
         public String getPlayerName()
         {
+            // TODO: validate name
             Console.WriteLine("What is the name of the Player?");
             return Console.ReadLine();
         }
@@ -124,8 +123,11 @@ namespace memoryGame
             shuffle(bRowString);
             List<Word> aRow = convertToWordsList(aRowString);
             List<Word> bRow = convertToWordsList(bRowString);
-            Console.WriteLine("aRowString = " + string.Join(", ", aRowString));
-            Console.WriteLine("bRowString = " + string.Join(", ", bRowString));
+            
+            // Helper - to see shuffled A and B rows
+            // Console.WriteLine("aRowString = " + string.Join(", ", aRowString));
+            // Console.WriteLine("bRowString = " + string.Join(", ", bRowString));
+            
             bool isPlaying = true;
             while (isPlaying)
             {
@@ -149,10 +151,6 @@ namespace memoryGame
                 
                 int hits = verifyCompatibilityAndGetHitNumber(aRow, bRow);
                 coverTable(aRow, bRow);
-                
-                // Console.WriteLine("Discovered start");
-                // DisplayManager.DisplayDiscoverdTable(aRow, bRow);
-                // Console.WriteLine("Discovered end");
                 
                 player.setHits(hits);
                 GUESS_CHANCES_LEFT--;
@@ -712,9 +710,9 @@ namespace memoryGame
     
         public static void DisplayHeader(Player player, int ROUND)
         {
-            // TODO: add player name
             ClearScreen();
             Console.WriteLine("=============================== ROUND " + ROUND);
+            Console.WriteLine("Player = " + player.getName());
             Console.WriteLine("Hits = " + player.getHits());
             Console.WriteLine("Hp = " + player.getHp());
             Console.WriteLine();
@@ -744,7 +742,5 @@ namespace memoryGame
                 Console.WriteLine("Empty table.");
             }
         }
-        
-        
     }
 }
