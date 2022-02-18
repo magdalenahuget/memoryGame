@@ -18,8 +18,18 @@ namespace memoryGame
 
     public class GameController
     {
+        private String filename = "src/main/resources/Words.txt";
+        private List<string> allWords = new List<string>();
+        private List<string> modeWords = new List<string>();
+        private Player player;
+        private int WORDS_NUMBER;
+        private int GUESS_CHANCES;
+        private bool isRunning = true;
+        // TODO: highscore
+        
         public GameController()
         {
+            this.player = new Player();
         }
 
         public void run()
