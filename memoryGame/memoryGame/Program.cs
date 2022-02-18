@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace memoryGame
 {
@@ -135,7 +136,7 @@ namespace memoryGame
                 DisplayManager.DisplayHeader(player, ROUND);
                 DisplayManager.DisplayTable(aRow, bRow);
 
-                // Coordinates firstCoordinates = askForCoordinates();
+                Coordinates firstCoordinates = askForCoordinates();
                 
                 DisplayManager.DisplayHeader(player, ROUND);
                 toggleWord(aRow, bRow, firstCoordinates);
@@ -262,6 +263,78 @@ namespace memoryGame
             {
                 bRowWord.toggleSkinBasedOnDiscovered();
             }
+        }
+        
+                private Coordinates askForCoordinates()
+        {
+            string inputCoordinates = "";
+            bool isInputNotCorrect = true;
+            while (isInputNotCorrect)
+            {
+                Console.WriteLine("\nEnter coordinates (e.g. 'A3'):");
+                inputCoordinates = Console.ReadLine();
+                if (inputCoordinates.Length < 3)
+                {
+                    isInputNotCorrect = false;
+                    break;
+                }
+                Console.WriteLine("You entered too long coordinates.");
+            }
+            
+            // Console.WriteLine("inputCoordinates = " + inputCoordinates);
+            string firstCoord = inputCoordinates[0].ToString().ToUpper();
+            string secondCoord = inputCoordinates[1].ToString();
+            String[] inputCoordinatesArray = new string[2];
+            inputCoordinatesArray[0] = firstCoord;
+            inputCoordinatesArray[1] = secondCoord;
+            
+            // Console.WriteLine("first index = " + inputCoordinatesArray[0]);
+
+            
+            bool yCoordsNotCorrect = true;
+            while (yCoordsNotCorrect)
+            {
+                string yCoord = inputCoordinatesArray[0];
+                if (yCoord.Equals("A") || yCoord.Equals("B"))
+                {
+                    yCoordsNotCorrect = false;
+                }
+                else
+                {
+                    Console.WriteLine("Given vertical coordinate (first one) is wrong. Try again.");
+                    inputCoordinates = Console.ReadLine();
+                    // inputCoordinatesArray = inputCoordinates.Split("");
+                    inputCoordinatesArray = Regex.Split(inputCoordinates, string.Empty);
+
+                }
+            }
+
+            bool xCoordsNotCorrect = true;
+            while (xCoordsNotCorrect)
+            {
+                string wordsNumberRegex = "[1-" + WORDS_NUMBER + "]";
+                Regex regex = new Regex(wordsNumberRegex);
+                Match match = regex.Match(inputCoordinatesArray[1]);
+                // if (inputCoordinatesArray[1].matches(wordsNumberRegex))
+                if (match.Success)
+                {
+                    xCoordsNotCorrect = false;
+                }
+                else
+                {
+                    Console.WriteLine("Given horizontal coordinate (second one) is wrong. Try again.");
+                    Console.WriteLine("Enter coordinates:");
+                    inputCoordinates = Console.ReadLine();
+                    inputCoordinatesArray = Regex.Split(inputCoordinates, string.Empty);
+                    // inputCoordinatesArray = inputCoordinates.Split("");
+                }
+            }
+
+            var coordinates = new Coordinates();
+            coordinates.setX(int.Parse(inputCoordinatesArray[1]) - 1);
+            coordinates.setY(inputCoordinatesArray[0]);
+            // Console.WriteLine("Your Coordinates:\n" + coordinates.toString());
+            return coordinates;
         }
         
         private bool isWinner(Player player)
