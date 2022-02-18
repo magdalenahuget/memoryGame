@@ -218,6 +218,52 @@ namespace memoryGame
             return words;
         }
 
+        private void toggleWord(List<Word> aWords, List<Word> bWords, Coordinates coordinates)
+        {
+            if (coordinates.getY().Equals("A"))
+            {
+                aWords[coordinates.getX()].toggleSkin();
+            }
+
+            if (coordinates.getY().Equals("B"))
+            {
+                bWords[coordinates.getX()].toggleSkin();
+            }
+        }
+        
+        private int verifyCompatibilityAndGetHitNumber(List<Word> aRow, List<Word> bRow)
+        {
+            int hits = 0;
+            foreach (Word aRowWord in aRow)
+            {
+                foreach (Word bRowWord in bRow)
+                {
+                    if (aRowWord.getSkin().Length > 1 && bRowWord.getSkin().Length > 1 &&
+                        aRowWord.getSkin().Equals(bRowWord.getSkin()))
+                    {
+                        aRowWord.setIsDiscovered(true);
+                        bRowWord.setIsDiscovered(true);
+                        hits++;
+                    }
+                }
+            }
+
+            return hits;
+        }
+        
+        private void coverTable(List<Word> aRow, List<Word> bRow)
+        {
+            foreach (Word aRowWord in aRow)
+            {
+                aRowWord.toggleSkinBasedOnDiscovered();
+            }
+
+            foreach (Word bRowWord in bRow)
+            {
+                bRowWord.toggleSkinBasedOnDiscovered();
+            }
+        }
+        
         private bool isWinner(Player player)
         {
             if (player.getHp() > 0)
