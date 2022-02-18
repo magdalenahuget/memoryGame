@@ -29,7 +29,8 @@ namespace memoryGame
         private int WORDS_NUMBER;
         private int GUESS_CHANCES;
         private bool isRunning = true;
-        // TODO: highscore
+        private List<HighScore> highScores = new List<HighScore>();
+
         
         public GameController()
         {
@@ -400,9 +401,7 @@ namespace memoryGame
 
             return false;
         }
-        
 
-        
         private int calculatePlayerScore(long gameTime, Player player, int chancesAfterWon)
         {
             int result = 100;
@@ -410,7 +409,14 @@ namespace memoryGame
             return result;
         }
         
-
+        private void addScoreToHighScores(int playerScore)
+        {
+            HighScore highScore = new HighScore();
+            highScore.setPlayerName(player.getName());
+            highScore.setScore(playerScore);
+            highScore.setGameLocalDateTime(DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss"));
+            highScores.Add(highScore);
+        }
 
     }
     
@@ -568,6 +574,43 @@ namespace memoryGame
         }
     }
     
+    public class HighScore
+    {
+        private String playerName;
+        private int score;
+        private String gameLocalDateTime;
+
+        public String getGameLocalDateTime()
+        {
+            return gameLocalDateTime;
+        }
+
+        public void setGameLocalDateTime(String gameLocalDateTime)
+        {
+            this.gameLocalDateTime = gameLocalDateTime;
+        }
+
+        public String getPlayerName()
+        {
+            return playerName;
+        }
+
+        public void setPlayerName(String playerName)
+        {
+            this.playerName = playerName;
+        }
+
+        public int getScore()
+        {
+            return score;
+        }
+
+        public void setScore(int score)
+        {
+            this.score = score;
+        }
+    }
+    
     public class FileHandler
     {
         public static List<string> getWordsList(string fileName)
@@ -685,5 +728,23 @@ namespace memoryGame
             Console.WriteLine("[3]-exit game");
             Console.WriteLine("\nChoose one option: ");
         }
+        
+        public static void DisplayHighScoreTable(List<HighScore> highScores)
+        {
+            Console.WriteLine("---------- High score table ----------");
+            Console.WriteLine("#, name, score, dateTime");
+            foreach (HighScore highScore in highScores)
+            {
+                Console.WriteLine("1. " + highScore.getPlayerName() + " " + highScore.getScore() + " " +
+                                  string.Join(", ", highScore.getGameLocalDateTime()));
+            }
+
+            if (highScores.Count == 0)
+            {
+                Console.WriteLine("Empty table.");
+            }
+        }
+        
+        
     }
 }
