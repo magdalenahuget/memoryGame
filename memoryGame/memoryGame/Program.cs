@@ -40,13 +40,79 @@ namespace memoryGame
             Console.WriteLine("Welcome " + playerName);
             DisplayManager.PressAnyKeyToContinue();
             // TODO: menu
-            // playMenu(playerName);
+            playMenu(playerName);
         }
         
+        private void playMenu(String name)
+        {
+            while (isRunning)
+            {
+                DisplayManager.displayMainMenu();
+                var chooseOption = Console.ReadLine();
+                DisplayManager.ClearScreen();
+                switch (chooseOption)
+                {
+                    case "1":
+                        playGame(name);
+                        break;
+                    case "2":
+                        DisplayManager.DisplayCredits();
+                        break;
+                    case "3":
+                        Environment.Exit(0);
+                        break;
+                    default:
+                        Console.WriteLine("Wrong input!");
+                        break;
+                }
+            }
+        }
+        
+        private void playGame(String name)
+        {
+            while (isRunning)
+            {
+                DisplayManager.DisplayModes();
+                var chooseOption = Console.ReadLine();
+                switch (chooseOption)
+                {
+                    case "1":
+                        //  Easy
+                        playMode(name, 4, 10, "easy");
+                        break;
+                    case "2":
+                        //  Hard
+                        playMode(name, 8, 15, "hard");
+                        break;
+                    case "3":
+                        Environment.Exit(0);
+                        break;
+                    default:
+                        Console.WriteLine("Wrong input!");
+                        break;
+                }
+            }
+        }
+
+        private void playMode(String name, int wordsNumberToGuess, int guessChances, String mode)
+        {
+            throw new NotImplementedException();
+        }
+
         public String getPlayerName()
         {
             Console.WriteLine("What is the name of the Player?");
             return Console.ReadLine();
+        }
+        
+        private bool isWinner(Player player)
+        {
+            if (player.getHp() > 0)
+            {
+                return true;
+            }
+
+            return false;
         }
 
     }
