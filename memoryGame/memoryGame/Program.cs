@@ -1,4 +1,8 @@
-﻿namespace memoryGame
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+namespace memoryGame
 {
     using System;
 
@@ -176,6 +180,15 @@
         public void setIsDiscovered(bool discovered)
         {
             isDiscovered = discovered;
+        }
+    }
+    
+    public class FileHandler
+    {
+        public static List<String> getWordsList(String fileName)
+        {
+            List<string> allLinesText = File.ReadAllLines(fileName).ToList();
+            return allLinesText;
         }
     }
     
