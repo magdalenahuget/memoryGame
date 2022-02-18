@@ -34,7 +34,19 @@ namespace memoryGame
 
         public void run()
         {
-            
+            Console.WriteLine("Welcome to my memory game!");
+            DisplayManager.ClearScreen();
+            var playerName = getPlayerName();
+            Console.WriteLine("Welcome " + playerName);
+            DisplayManager.PressAnyKeyToContinue();
+            // TODO: menu
+            // playMenu(playerName);
+        }
+        
+        public String getPlayerName()
+        {
+            Console.WriteLine("What is the name of the Player?");
+            return Console.ReadLine();
         }
 
     }
@@ -201,5 +213,55 @@ namespace memoryGame
             return allLinesText;
         }
     }
+
+    public class DisplayManager
+    {
+        public static void displayMainMenu()
+        {
+            Console.WriteLine("MEMORY GAME");
+            Console.WriteLine("\n[1]-start game");
+            Console.WriteLine("[2]-credits");
+            Console.WriteLine("[3]-exit game");
+            Console.WriteLine("\nChoose one option: ");
+        }
+
+        public static void PressAnyKeyToContinue()
+        {
+            Console.WriteLine("\n\n-----------------------------");
+            Console.WriteLine("| Press any key to continue |");
+            Console.WriteLine("-----------------------------");
+            Console.ReadLine();
+        }
+
+        public static void DisplayModes()
+        {
+            Console.WriteLine("MEMORY GAME MODES");
+            Console.WriteLine("\n[1]-easy");
+            Console.WriteLine("[2]-hard");
+            Console.WriteLine("[3]-exit game");
+            Console.WriteLine("\nChoose one option: ");
+        }
+        
+        
+        
+        public static void DisplayCredits()
+        {
+            Console.WriteLine("Produced by Magdalena Huget");
+        }
+        
+        public static void ClearScreen()
+        {
+            Console.WriteLine("[H[2J");
+        }
     
+        public static void DisplayHeader(Player player, int ROUND)
+        {
+            // TODO: add player name
+            ClearScreen();
+            Console.WriteLine("=============================== ROUND " + ROUND);
+            Console.WriteLine("Hits = " + player.getHits());
+            Console.WriteLine("Hp = " + player.getHp());
+            Console.WriteLine();
+        }
+    }
 }
