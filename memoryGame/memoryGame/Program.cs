@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -42,7 +43,13 @@ namespace memoryGame
             // TODO: menu
             playMenu(playerName);
         }
-        
+
+        public String getPlayerName()
+        {
+            Console.WriteLine("What is the name of the Player?");
+            return Console.ReadLine();
+        }
+
         private void playMenu(String name)
         {
             while (isRunning)
@@ -109,6 +116,12 @@ namespace memoryGame
             modeWords = getModeWords(allWords);
             List<String> aRowString = new List<String>(modeWords);
             List<String> bRowString = new List<String>(modeWords);
+            shuffle(aRowString);
+            shuffle(bRowString); // TODO: check if works
+            List<Word> aRow = convertToWordsList(aRowString);
+            List<Word> bRow = convertToWordsList(bRowString);
+            Console.WriteLine("aRowString = " + string.Join(", ", aRowString));
+            Console.WriteLine("bRowString = " + string.Join(", ", bRowString));
         }
         
         private List<String> getModeWords(List<string> allWords)
@@ -156,13 +169,18 @@ namespace memoryGame
                 list[n] = value;
             }
         }
-
-        public String getPlayerName()
-        {
-            Console.WriteLine("What is the name of the Player?");
-            return Console.ReadLine();
-        }
         
+        private List<Word> convertToWordsList(List<string> aRowString)
+        {
+            var words = new List<Word>();
+            foreach (String word in aRowString)
+            {
+                words.Add(new Word(word));
+            }
+
+            return words;
+        }
+
         private bool isWinner(Player player)
         {
             if (player.getHp() > 0)
@@ -331,7 +349,7 @@ namespace memoryGame
     
     public class FileHandler
     {
-        public static List<String> getWordsList(String fileName)
+        public static List<string> getWordsList(string fileName)
         {
             List<string> allLinesText = File.ReadAllLines(fileName).ToList();
             return allLinesText;
