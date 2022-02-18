@@ -135,6 +135,26 @@ namespace memoryGame
                 DisplayManager.DisplayHeader(player, ROUND);
                 DisplayManager.DisplayTable(aRow, bRow);
 
+                // Coordinates firstCoordinates = askForCoordinates();
+                
+                DisplayManager.DisplayHeader(player, ROUND);
+                toggleWord(aRow, bRow, firstCoordinates);
+                DisplayManager.DisplayTable(aRow, bRow);
+                Coordinates secondCoordinates = askForCoordinates();
+                toggleWord(aRow, bRow, secondCoordinates);
+                DisplayManager.DisplayTable(aRow, bRow);
+                
+                int hits = verifyCompatibilityAndGetHitNumber(aRow, bRow);
+                coverTable(aRow, bRow);
+                
+                // Console.WriteLine("Discovered start");
+                // DisplayManager.DisplayDiscoverdTable(aRow, bRow);
+                // Console.WriteLine("Discovered end");
+                
+                player.setHits(hits);
+                GUESS_CHANCES_LEFT--;
+                player.setHp(GUESS_CHANCES_LEFT);
+                DisplayManager.PressAnyKeyToContinue();
             }
             
             
@@ -427,6 +447,32 @@ namespace memoryGame
             foreach (Word word in words)
             {
                 row.Append(word.getSkin()).Append(" ");
+            }
+
+            return row.ToString();
+        }
+        
+        public static void DisplayDiscoverdTable(List<Word> aWords, List<Word> bWords)
+        {
+            StringBuilder firstLine = new StringBuilder();
+            firstLine.Append("  ");
+            for (int i = 1; i <= aWords.Count; i++)
+            {
+                firstLine.Append(i).Append(" ");
+            }
+
+            string aRow = CreateRowDiscovered(aWords, "A");
+            string bRow = CreateRowDiscovered(bWords, "B");
+            Console.WriteLine(string.Join(", ", firstLine) + "\n" + aRow + "\n" + bRow);
+        }
+        
+        public static string CreateRowDiscovered(List<Word> words, string lineTitle)
+        {
+            StringBuilder row = new StringBuilder();
+            row.Append(lineTitle).Append(" ");
+            foreach (Word word in words)
+            {
+                row.Append(word.getIsDiscovered()).Append(" ");
             }
 
             return row.ToString();
