@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -156,6 +157,25 @@ namespace memoryGame
                 GUESS_CHANCES_LEFT--;
                 player.setHp(GUESS_CHANCES_LEFT);
                 DisplayManager.PressAnyKeyToContinue();
+            }
+            
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            stopwatch.Stop();
+            long gameTime = getTimeSeconds(stopwatch);
+            bool playerWon = isWinner(player);
+            if (playerWon)
+            {
+                int chancesAfterWon = GUESS_CHANCES - GUESS_CHANCES_LEFT;
+                int playerScore = calculatePlayerScore(gameTime, player, chancesAfterWon);
+                Console.WriteLine("You solved the memory game after " + chancesAfterWon + " chances." +
+                                  " It took you " + gameTime + " seconds. Your score is: " +
+                                  playerScore + "\n\n");
+                addScoreToHighScores(playerScore);
+            }
+            else
+            {
+                Console.WriteLine("Sorry, You lost!");
             }
             
             
@@ -366,6 +386,11 @@ namespace memoryGame
             }
         }
         
+        private long getTimeSeconds(Stopwatch stopwatch)
+        {
+            return stopwatch.Elapsed.Seconds;
+        }
+        
         private bool isWinner(Player player)
         {
             if (player.getHp() > 0)
@@ -375,6 +400,17 @@ namespace memoryGame
 
             return false;
         }
+        
+
+        
+        private int calculatePlayerScore(long gameTime, Player player, int chancesAfterWon)
+        {
+            int result = 100;
+            result = (int) (result - gameTime + chancesAfterWon);
+            return result;
+        }
+        
+
 
     }
     
