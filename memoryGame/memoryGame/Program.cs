@@ -96,7 +96,50 @@ namespace memoryGame
 
         private void playMode(String name, int wordsNumberToGuess, int guessChances, String mode)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Welcome to mode " + mode);
+            DisplayManager.PressAnyKeyToContinue();
+            int ROUND = 0;
+            WORDS_NUMBER = wordsNumberToGuess;
+            GUESS_CHANCES = guessChances;
+            // GUESS_CHANCES = 1;
+            int GUESS_CHANCES_LEFT = GUESS_CHANCES;
+            player.setName(name);
+            player.setHp(GUESS_CHANCES_LEFT);
+            allWords = FileHandler.getWordsList("../../Words.txt");
+            modeWords = getModeWords(allWords);
+            List<String> aRowString = new List<String>(modeWords);
+            List<String> bRowString = new List<String>(modeWords);
+        }
+        
+        private List<String> getModeWords(List<string> allWords)
+        {
+            List<int> indexes = getIndexes(allWords);
+            var modeWords = new List<String>();
+            foreach (int index in indexes)
+            {
+                modeWords.Add(allWords[index]);
+            }
+
+            return modeWords;
+        }
+        
+        public List<int> getIndexes(List<string> words)
+        {
+            List<int> list = new List<int>();
+            for (int i = 0; i < words.Count; i++)
+            {
+                list.Add(i);
+            }
+
+            // shuffle(list); // TODO:
+            List<int> indexes = new List<int>();
+            for (int i = 0; i < WORDS_NUMBER; i++)
+            {
+                indexes.Add(list[i]);
+                Console.WriteLine(list[i]);
+            }
+
+            return indexes;
         }
 
         public String getPlayerName()
