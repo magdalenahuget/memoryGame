@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace memoryGame
 {
@@ -117,11 +118,27 @@ namespace memoryGame
             List<String> aRowString = new List<String>(modeWords);
             List<String> bRowString = new List<String>(modeWords);
             shuffle(aRowString);
-            shuffle(bRowString); // TODO: check if works
+            shuffle(bRowString);
             List<Word> aRow = convertToWordsList(aRowString);
             List<Word> bRow = convertToWordsList(bRowString);
             Console.WriteLine("aRowString = " + string.Join(", ", aRowString));
             Console.WriteLine("bRowString = " + string.Join(", ", bRowString));
+            bool isPlaying = true;
+            while (isPlaying)
+            {
+                if (player.getHp() == 0 || this.player.getHits() == WORDS_NUMBER)
+                {
+                    isPlaying = false;
+                    continue;
+                }
+                ROUND++;
+                DisplayManager.DisplayHeader(player, ROUND);
+                DisplayManager.DisplayTable(aRow, bRow);
+
+            }
+            
+            
+            
         }
         
         private List<String> getModeWords(List<string> allWords)
@@ -383,12 +400,36 @@ namespace memoryGame
             Console.WriteLine("[3]-exit game");
             Console.WriteLine("\nChoose one option: ");
         }
-        
-        
-        
+
         public static void DisplayCredits()
         {
             Console.WriteLine("Produced by Magdalena Huget");
+        }
+        
+        public static void DisplayTable(List<Word> aWords, List<Word> bWords)
+        {
+            var firstLine = new StringBuilder();
+            firstLine.Append("  ");
+            for (int i = 1; i <= aWords.Count; i++)
+            {
+                firstLine.Append(i).Append(" ");
+            }
+
+            var aRow = CreateRow(aWords, "A");
+            var bRow = CreateRow(bWords, "B");
+            Console.WriteLine(string.Join(", ", firstLine) + "\n" + aRow + "\n" + bRow);
+        }
+        
+        public static String CreateRow(List<Word> words, string lineTitle)
+        {
+            StringBuilder row = new StringBuilder();
+            row.Append(lineTitle).Append(" ");
+            foreach (Word word in words)
+            {
+                row.Append(word.getSkin()).Append(" ");
+            }
+
+            return row.ToString();
         }
         
         public static void ClearScreen()
